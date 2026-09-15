@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="COSMOS — a living map of the sky. Live orbits, tonight's dark-sky window, moon phase, and the COSMOS ecosystem. Built by Yogesh.">
+<meta name="keywords" content="astronomy, space, solar system, stargazing, moon phase, twilight, ISS tracker, COSMOS, Yogesh">
+<meta name="author" content="Yogesh">
+<meta property="og:title" content="COSMOS — A Living Map of the Sky">
+<meta property="og:description" content="Watch the solar system orbit, check tonight's sky, and explore the COSMOS ecosystem.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='10' fill='%23f6c453'/%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%238b5cf6' stroke-width='2' stroke-dasharray='4 6'/%3E%3C/svg%3E">
+<title>COSMOS — A Living Map of the Sky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="sky-field">
+  <div class="stars stars-a"></div>
+  <div class="stars stars-b"></div>
+  <div class="stars stars-c"></div>
+  <div class="nebula nebula-violet"></div>
+  <div class="nebula nebula-pink"></div>
+  <div class="nebula nebula-blue"></div>
+</div>
+
+<div class="meteor-layer" id="meteorLayer" aria-hidden="true"></div>
+
+<header class="nav">
+  <a href="#top" class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    COSMOS
+  </a>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="#solar-system" class="active">Solar System</a>
+    <a href="#tonight">Tonight's Sky</a>
+    <a href="#constellation">Constellations</a>
+    <a href="#ecosystem">Ecosystem</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="nav-actions">
+    <button class="icon-button" id="openSearch" aria-label="Search" aria-haspopup="dialog" aria-controls="searchOverlay">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <a href="#tonight" class="nav-cta">Launch tonight's sky</a>
+    <button class="menu-button" id="menuButton" aria-label="Open menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="search-overlay" id="searchOverlay" aria-hidden="true">
+  <div class="search-box" role="dialog" aria-modal="true" aria-labelledby="searchHeading">
+    <button class="close-x" id="closeSearch" type="button" aria-label="Close search">×</button>
+    <p class="search-kicker">Search the cosmos</p>
+    <h2 id="searchHeading">Find a planet, a tool, or a phenomenon</h2>
+    <div class="search-input-wrapper">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <label class="sr-only" for="searchInput">Search</label>
+      <input type="text" id="searchInput" placeholder="Try “Saturn”, “meteor”, or “ISS”" autocomplete="off">
+    </div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+</div>
+
+<main id="top">
+
+<section class="hero" id="solar-system">
+
+  <div class="hero-copy">
+    <p class="kicker">A living map of the sky, built by Yogesh</p>
+    <h1>The solar system,<br>orbiting in<br><em>real motion.</em></h1>
+    <p class="hero-lede">
+      Watch the planets circle the Sun, track tonight's moon and
+      darkness window, and follow the ISS as it crosses overhead —
+      one corner of the COSMOS ecosystem.
+    </p>
+    <div class="hero-actions">
+      <a href="#tonight" class="btn-primary">Check tonight's sky</a>
+      <a href="#targets" class="btn-ghost">Explore the planets</a>
+    </div>
+    <div class="light-counter">
+      <span>Since you opened this page, light has crossed</span>
+      <strong id="lightDistance">0</strong> km
+    </div>
+  </div>
+
+  <div class="orbit-wrap">
+    <div class="orbit-system">
+      <div class="sun" aria-hidden="true"></div>
+
+      <div class="orbit orbit-1"><span class="orbit-planet planet-mercury"></span></div>
+      <div class="orbit orbit-2"><span class="orbit-planet planet-venus"></span></div>
+      <div class="orbit orbit-3"><span class="orbit-planet planet-earth"></span></div>
+      <div class="orbit orbit-4"><span class="orbit-planet planet-mars"></span></div>
+      <div class="orbit orbit-5"><span class="orbit-planet planet-jupiter"></span></div>
+      <div class="orbit orbit-6"><span class="orbit-planet planet-saturn"></span></div>
+    </div>
+
+    <div class="hud">
+      <div class="hud-row">
+        <span>Local time</span>
+        <strong id="localTime" class="hud-mono">--:--:--</strong>
+      </div>
+      <div class="hud-row">
+        <span>Moon</span>
+        <strong id="moonHud" class="hud-mono">—</strong>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section class="ticker" aria-label="Deep sky objects">
+  <div class="ticker-track">
+    <span>Orion Nebula</span><i>✦</i><span>Andromeda Galaxy</span><i>✦</i><span>Pillars of Creation</span><i>✦</i>
+    <span>Crab Nebula</span><i>✦</i><span>Ring Nebula</span><i>✦</i><span>Pleiades</span><i>✦</i>
+    <span>Orion Nebula</span><i>✦</i><span>Andromeda Galaxy</span><i>✦</i><span>Pillars of Creation</span><i>✦</i>
+    <span>Crab Nebula</span><i>✦</i><span>Ring Nebula</span><i>✦</i><span>Pleiades</span><i>✦</i>
+  </div>
+</section>
+
+<section class="section" id="tonight">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Mission control</p>
+      <h2>Tonight, from<br>where you're standing.</h2>
+    </div>
+    <p class="section-note">Live data, refreshed automatically. Location stays in your browser — COSMOS never stores it.</p>
+  </div>
+
+  <div class="tonight-grid">
+
+    <article class="log-card log-card-wide">
+      <div class="log-card-head">
+        <span class="log-tag">Dark-sky window</span>
+        <span class="live-pill"><span></span>Live</span>
+      </div>
+      <h3 id="darkWindow">Enable location to calculate</h3>
+      <p id="darkWindowNote">The stretch tonight when the sun sits far enough below the horizon that its glow no longer washes out faint objects.</p>
+      <div class="data-row" id="twilightRow" hidden>
+        <div><span>Sunset</span><strong id="tSunset">—</strong></div>
+        <div><span>Civil dusk</span><strong id="tCivil">—</strong></div>
+        <div><span>Nautical dusk</span><strong id="tNautical">—</strong></div>
+        <div><span>Full dark</span><strong id="tAstro">—</strong></div>
+      </div>
+      <small class="source">Twilight data: sunrise-sunset.org</small>
+    </article>
+
+    <article class="log-card">
+      <div class="log-card-head">
+        <span class="log-tag">Moon</span>
+      </div>
+      <h3 id="moonHeadline">Reading the ephemeris…</h3>
+      <p id="moonNote">A bright moon raises the sky background and hides faint deep-sky objects.</p>
+      <div class="data-row">
+        <div><span>Illuminated</span><strong id="moonPercent">—</strong></div>
+        <div><span>Next full moon</span><strong id="nextFull">—</strong></div>
+      </div>
+    </article>
+
+    <article class="log-card">
+      <div class="log-card-head">
+        <span class="log-tag">Seeing conditions</span>
+      </div>
+      <h3 id="seeingHeadline">Location required</h3>
+      <p id="seeingNote">Cloud cover and wind at your coordinates, read as a rough stargazing forecast.</p>
+      <button class="location-button" id="enableLocation" type="button">Enable live location</button>
+      <div class="data-row">
+        <div><span>Cloud cover</span><strong id="wClouds">—</strong></div>
+        <div><span>Wind</span><strong id="wWind">—</strong></div>
+      </div>
+      <small class="source">Weather: Open-Meteo</small>
+    </article>
+
+    <article class="log-card">
+      <div class="log-card-head">
+        <span class="log-tag">ISS</span>
+        <span class="live-pill"><span></span>Live</span>
+      </div>
+      <h3 id="issLocation">Locating…</h3>
+      <p id="issDistance">The brightest naked-eye satellite in orbit — this is its current ground position.</p>
+      <div class="data-row">
+        <div><span>Latitude</span><strong id="issLat">—</strong></div>
+        <div><span>Longitude</span><strong id="issLon">—</strong></div>
+        <div><span>Updated</span><strong id="issUpdated">—</strong></div>
+      </div>
+      <small class="source">Position: wheretheiss.at</small>
+    </article>
+
+    <article class="log-card log-card-wide">
+      <div class="log-card-head">
+        <span class="log-tag">Deep space image</span>
+      </div>
+      <h3 id="apodTitle">Loading today's image…</h3>
+      <img id="apodImage" class="apod-image" alt="" hidden loading="lazy">
+      <p id="apodDescription">NASA's daily deep-sky or planetary image, for when your own sky is clouded out.</p>
+      <a id="apodLink" class="text-link" href="https://apod.nasa.gov/apod/astropix.html" target="_blank" rel="noopener" hidden>Open full entry ↗</a>
+      <small class="source">NASA Astronomy Picture of the Day</small>
+    </article>
+
+    <article class="log-card">
+      <div class="log-card-head">
+        <span class="log-tag">Cosmic fact</span>
+      </div>
+      <h3 id="cosmicFact">Light from the Sun takes about eight minutes to reach Earth.</h3>
+      <button class="text-button" id="newFact" type="button">Another fact →</button>
+    </article>
+
+  </div>
+</section>
+
+<section class="section" id="targets">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Observation targets</p>
+      <h2>Eight worlds,<br>one <em>orbit each.</em></h2>
+    </div>
+    <p class="section-note">Apparent magnitude and instrument notes are typical values — actual visibility depends on the date.</p>
+  </div>
+
+  <div class="target-grid">
+    <article class="target-card" data-target="mercury" tabindex="0" role="button" aria-label="View Mercury observation notes">
+      <div class="planet mercury"></div>
+      <h3>Mercury</h3>
+      <p class="target-mag">mag −1.9 to 5.7</p>
+      <p class="target-note">Naked eye, low on the horizon near dusk or dawn</p>
+    </article>
+    <article class="target-card" data-target="venus" tabindex="0" role="button" aria-label="View Venus observation notes">
+      <div class="planet venus"></div>
+      <h3>Venus</h3>
+      <p class="target-mag">mag −4.6</p>
+      <p class="target-note">Naked eye — the brightest planet in the sky</p>
+    </article>
+    <article class="target-card" data-target="earth" tabindex="0" role="button" aria-label="View Earth details">
+      <div class="planet earth"></div>
+      <h3>Earth</h3>
+      <p class="target-mag">Your observing platform</p>
+      <p class="target-note">Everything above starts from here</p>
+    </article>
+    <article class="target-card" data-target="mars" tabindex="0" role="button" aria-label="View Mars observation notes">
+      <div class="planet mars"></div>
+      <h3>Mars</h3>
+      <p class="target-mag">mag −2.9 to 1.8</p>
+      <p class="target-note">Naked eye, distinctly reddish; best near opposition</p>
+    </article>
+    <article class="target-card" data-target="jupiter" tabindex="0" role="button" aria-label="View Jupiter observation notes">
+      <div class="planet jupiter"></div>
+      <h3>Jupiter</h3>
+      <p class="target-mag">mag −2.9 to −1.6</p>
+      <p class="target-note">Naked eye; binoculars resolve the four Galilean moons</p>
+    </article>
+    <article class="target-card" data-target="saturn" tabindex="0" role="button" aria-label="View Saturn observation notes">
+      <div class="planet saturn"></div>
+      <h3>Saturn</h3>
+      <p class="target-mag">mag 0.5 average</p>
+      <p class="target-note">Naked eye; a small telescope splits the rings</p>
+    </article>
+    <article class="target-card" data-target="uranus" tabindex="0" role="button" aria-label="View Uranus observation notes">
+      <div class="planet uranus"></div>
+      <h3>Uranus</h3>
+      <p class="target-mag">mag 5.7</p>
+      <p class="target-note">Barely naked eye under dark skies; binoculars help</p>
+    </article>
+    <article class="target-card" data-target="neptune" tabindex="0" role="button" aria-label="View Neptune observation notes">
+      <div class="planet neptune"></div>
+      <h3>Neptune</h3>
+      <p class="target-mag">mag 7.8</p>
+      <p class="target-note">Telescope required — too faint for the naked eye</p>
+    </article>
+  </div>
+
+  <p class="grid-hint">Select a world for its full observation notes.</p>
+</section>
+
+<div class="target-modal" id="targetModal" role="dialog" aria-modal="true" aria-labelledby="targetModalTitle" aria-hidden="true">
+  <div class="target-modal-card">
+    <button class="close-x" id="closeTargetModal" type="button" aria-label="Close">×</button>
+    <div class="target-modal-visual">
+      <div class="planet modal-planet" id="modalPlanet"></div>
+    </div>
+    <div class="target-modal-content">
+      <span class="log-tag" id="targetModalCategory">TARGET PROFILE</span>
+      <h2 id="targetModalTitle">Earth</h2>
+      <p id="targetModalDescription"></p>
+      <div class="modal-fact">
+        <span>Field note</span>
+        <strong id="targetModalFact"></strong>
+      </div>
+      <div class="modal-grid">
+        <div><span>Distance from Sun</span><strong id="targetDistance"></strong></div>
+        <div><span>Orbital period</span><strong id="targetOrbit"></strong></div>
+        <div><span>Apparent magnitude</span><strong id="targetMagnitude"></strong></div>
+        <div><span>Instrument needed</span><strong id="targetInstrument"></strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section constellation-section" id="constellation">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Constellation of the month</p>
+      <h2>Orion, the<br><em>hunter overhead.</em></h2>
+    </div>
+    <p class="section-note">Visible worldwide, and one of the easiest patterns to learn — three stars in a row form the belt.</p>
+  </div>
+
+  <div class="constellation-panel">
+    <svg class="constellation-svg" id="orionSvg" viewBox="0 0 500 560" aria-hidden="true">
+      <g class="orion-lines" id="orionLines">
+        <line x1="100" y1="60"  x2="330" y2="40"/>
+        <line x1="330" y1="40"  x2="380" y2="230"/>
+        <line x1="380" y1="230" x2="230" y2="260"/>
+        <line x1="230" y1="260" x2="120" y2="250"/>
+        <line x1="120" y1="250" x2="100" y2="60"/>
+        <line x1="150" y1="240" x2="190" y2="250"/>
+        <line x1="190" y1="250" x2="235" y2="260"/>
+        <line x1="150" y1="240" x2="120" y2="420"/>
+        <line x1="235" y1="260" x2="330" y2="440"/>
+      </g>
+      <g class="orion-stars">
+        <circle cx="100" cy="60" r="7"/>
+        <circle cx="330" cy="40" r="6"/>
+        <circle cx="380" cy="230" r="9"/>
+        <circle cx="150" cy="240" r="4"/>
+        <circle cx="190" cy="250" r="4"/>
+        <circle cx="235" cy="260" r="4"/>
+        <circle cx="230" cy="260" r="5"/>
+        <circle cx="120" cy="250" r="8"/>
+        <circle cx="120" cy="420" r="6"/>
+        <circle cx="330" cy="440" r="6"/>
+      </g>
+    </svg>
+
+    <div class="constellation-copy">
+      <p><strong>Betelgeuse</strong>, the reddish shoulder star, is a red supergiant nearing the end of its life — it could go supernova anytime in the next hundred thousand years.</p>
+      <p><strong>Rigel</strong>, the blue-white foot, burns far hotter and is one of the brightest stars in the night sky.</p>
+      <p>The three belt stars — <strong>Alnitak, Alnilam, Mintaka</strong> — sit almost in a perfect line and are the fastest way to find Orion from anywhere in the sky.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ecosystem" id="ecosystem">
+  <div class="ecosystem-glow" aria-hidden="true"></div>
+  <div class="ecosystem-content">
+    <p class="eyebrow eyebrow-light">The COSMOS ecosystem</p>
+    <h2>One project<br>keeps <em>branching.</em></h2>
+    <p class="ecosystem-lede">
+      This live sky map is one piece of COSMOS — a running set of sites,
+      apps, and experiments connecting astronomy, code, and curiosity.
+    </p>
+  </div>
+
+  <div class="ecosystem-grid">
+    <a href="https://heyzine.com/" target="_blank" rel="noopener" class="ecosystem-card">
+      <span class="ecosystem-type">Book</span>
+      <h3>Code the Cosmos</h3>
+      <p>A written exploration linking programming and the universe.</p>
+      <span class="ecosystem-arrow">↗</span>
+    </a>
+    <a href="https://cosmos128.wordpress.com/" target="_blank" rel="noopener" class="ecosystem-card">
+      <span class="ecosystem-type">Website</span>
+      <h3>COSMOS 128</h3>
+      <p>An earlier generation of the COSMOS web ecosystem.</p>
+      <span class="ecosystem-arrow">↗</span>
+    </a>
+    <a href="https://yogeshcosmos.lovable.app/" target="_blank" rel="noopener" class="ecosystem-card">
+      <span class="ecosystem-type">Application</span>
+      <h3>COSMOS 129</h3>
+      <p>A mission-control style app inside the COSMOS ecosystem.</p>
+      <span class="ecosystem-arrow">↗</span>
+    </a>
+    <a href="https://sathishyogesh20-del.github.io/MY_PORTFOLIO/" target="_blank" rel="noopener" class="ecosystem-card">
+      <span class="ecosystem-type">Portfolio</span>
+      <h3>Yogesh</h3>
+      <p>Personal development portfolio and digital identity.</p>
+      <span class="ecosystem-arrow">↗</span>
+    </a>
+  </div>
+</section>
+
+<section class="section logbook">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Mission log</p>
+      <h2>Entries so far.</h2>
+    </div>
+  </div>
+  <ol class="logbook-list">
+    <li><span>01</span><div><strong>COSMOS Ecosystem</strong><p>Several connected projects, one running thread.</p></div></li>
+    <li><span>02</span><div><strong>Live orbital data</strong><p>Real twilight, moon phase, and satellite tracking, tied to your own coordinates.</p></div></li>
+    <li><span>03</span><div><strong>A living solar system</strong><p>The hero orbit visual and constellation map, added to make the site feel like the sky it describes.</p></div></li>
+  </ol>
+</section>
+
+<section class="cta-section" id="contact">
+  <div class="cta-ring cta-ring-a" aria-hidden="true"></div>
+  <div class="cta-ring cta-ring-b" aria-hidden="true"></div>
+  <div class="cta-content">
+    <p class="eyebrow eyebrow-light">Get in touch</p>
+    <h2>Clear skies,<br><em>and questions welcome.</em></h2>
+    <p>For the ecosystem, the live sky map, or just to compare notes on last night's sky.</p>
+    <a href="mailto:satishyogesh20@gmail.com" class="btn-primary">Send a message</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-top">
+    <a href="#top" class="brand footer-brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      COSMOS
+    </a>
+    <p class="footer-tagline">A living map of the sky, and everything orbiting it.</p>
+  </div>
+  <div class="footer-links">
+    <div>
+      <span>Explore</span>
+      <a href="#solar-system">Solar System</a>
+      <a href="#tonight">Tonight's Sky</a>
+      <a href="#constellation">Constellations</a>
+    </div>
+    <div>
+      <span>Connect</span>
+      <a href="mailto:satishyogesh20@gmail.com">Email</a>
+      <a href="https://github.com/sathishyogesh20-del" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://sathishyogesh20-del.github.io/" target="_blank" rel="noopener">Portfolio</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span id="footerYear">© 2026 COSMOS</span>
+    <span>Built by Yogesh</span>
+    <span>For anyone who looks up</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
